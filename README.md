@@ -7,9 +7,13 @@ macros are provided that make writing them much easier. For more details see our
 
 ## Usage
 
-You will need the Haskell compiler ghc to compile the system (I recommend Haskell Platform[3] because it comes with cabal to install packages you might need). Compile using:
+You will need the Haskell compiler ghc to compile the system (I recommend Haskell Platform[3] because it comes with cabal to install packages you might need). 
 
-```ghc --make -rtsopts rungame.hs```
+Dependencies: mtl, text, parsec, split, and parallel
+
+Compile using:
+
+```ghc --make -rtsopts -XFlexibleContexts rungame.hs```
 
 The `-rtsopts` option will allow you to provide GHC runtime options to the executable. You should end up with an executable called rungame.exe (on Windows) or just rungame (*NIX systems). Run with
 
