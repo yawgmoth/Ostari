@@ -6,6 +6,7 @@ import AbstractActions
 import Baltag hiding (choice)
 import BaseTypes
 import Data.List
+import qualified Data.Map as Map
 import Control.Monad
 import Control.Applicative hiding ((<|>),many,optional)
 
@@ -65,7 +66,12 @@ brackets p = do
               return result
 
 
-parseArg = try parseSecretArg <|> parsePublicArg
+parseArg ctx = do
+                  (arg,argtype,actors) <- try parseSecretArg <|> parsePublicArg
+                  if Map.member argtype (sets ctx) then
+                      return (arg,argtype,actors)
+                  else
+                      fail ("Unknown type: " ++ argtype)
 
 parseSecretArg = do
               arg <- identifier
@@ -80,10 +86,10 @@ parsePublicArg = do
               argtype <- identifier
               return (arg, argtype, [])
 
-abstractActionHeader = 
+abstractActionHeader ctx = 
                  do 
                     name <- identifier
-                    args <- parens $ parseArg `sepBy` (symbol ",")
+                    args <- parens $ (parseArg ctx) `sepBy` (symbol ",")
                     many space
                     innerAction <- abstractAction
                     many space
@@ -380,6 +386,6 @@ toArgs ((argname,argtype,[]):args) action = PublicArgument argname argtype $ toA
 toArgs ((argname,argtype,actors):args) action = SecretArgument actors argname argtype $ toArgs args action
 
 
-parseAction :: String -> Either ParseError (String,AbstractAction)
-parseAction text = parse abstractActionHeader "(unknown)" text
+--parseAction :: String -> Either ParseError (String,AbstractAction)
+--parseAction text = parse (abstractActionHeader ctx0) "(unknown)" text
 

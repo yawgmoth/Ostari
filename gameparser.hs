@@ -184,8 +184,9 @@ parseGame = do
                symbol "Properties:"
                props <- many1 $ try parseProperties
                many space
+               let ctx = makeContext types props
                symbol "Actions:"
-               actions <- many1 $ try abstractActionHeader
+               actions <- many1 $ try $ abstractActionHeader ctx
                many space
                symbol "Initial:"
                initial <- parseInitial
@@ -198,7 +199,7 @@ parseGame = do
                execute <- many1 $ try parseExecute
                many space
                symbol "Done."
-               let ctx = makeContext types props
+               
                let acts = actors ctx
                let ids = makeIDMap ctx
                let state = if length knows == 0 then makeState ids "Initial" (Map.fromList (("Initial",initial):states)) acts else
