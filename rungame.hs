@@ -11,7 +11,9 @@ import BaltagExecution
 import AbstractActionParser
 import qualified Data.ByteString as B
 import qualified Data.Map as Map
+import Data.Char
 import Data.List
+import Data.List.Split
 import Debug.Trace
 import Data.Either
 import Data.Function
@@ -34,9 +36,19 @@ main = do
           
           processParseResult input MainOptions { suspicions=scount }
           
+
+ltrim :: String -> String
+ltrim = dropWhile isSpace
+   
+   
+isComment :: String -> Bool
+isComment s = isPrefixOf "//" $ ltrim s
+          
 processFile fname = do
           content <- readFile fname
-          return $ parse parseGame fname content
+          let lines = splitOn "\n" content
+          let nonComments = filter (not . isComment) lines
+          return $ parse parseGame fname $ intercalate "\n" nonComments
 
 processParseResult (Left err) opts = putStrLn $ show err
 processParseResult (Right presult) opts = do
