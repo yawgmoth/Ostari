@@ -23,6 +23,13 @@ or
 
 A few demo input files are provided, as described below. If you run out of stack space, pass e.g. `+RTS -K 100M` as additional parameters to increase the stack to 100 MB.
 
+You can also build the project with `stack` (or `cabal`), e.g.
+
+```stack build```
+and
+```stack exec Ostari <inputfile>```
+
+
 ## Examples
 
 * [logicians.cfg](logicians.cfg) contains a folk joke encoded as DEL actions. The joke goes as follows: Three logicians walk into a bar. The bar tender asks them: "Do all of you want a beer?", to which the first logician answers "I don't know".  Then the second logicians says "I don't know", after which the third logician says "yes". The encoding of this joke can be used as an explanation: If the first logician did not want a beer, they would know that not all of them wanted one, therefore they must want a beer. Likewise for the second logician. The third logician can therefore take the two answers as confirmations that the other two each want a beer, and since the third logician also wants one, they can answer in the affirmative. 
