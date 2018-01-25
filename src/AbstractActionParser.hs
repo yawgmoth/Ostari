@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module AbstractActionParser where
 
 import Text.ParserCombinators.Parsec
